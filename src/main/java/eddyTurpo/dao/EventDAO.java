@@ -1,6 +1,8 @@
 package eddyTurpo.dao;
 
+import eddyTurpo.entities.Concerto;
 import eddyTurpo.entities.Evento;
+import eddyTurpo.enums.GenereType;
 import eddyTurpo.enums.InStreamingType;
 import eddyTurpo.exceptions.NotFoundEx;
 import jakarta.persistence.EntityManager;
@@ -41,8 +43,15 @@ public class EventDAO {
 
     }
 
-    public List<InStreamingType> getConcertiInStreaming() {
-        TypedQuery<InStreamingType> query = em.createQuery("SELECT c.in_streaming FROM Concerti c", InStreamingType.class);
+    public List<Concerto> getConcertiInStreaming(InStreamingType stato) {
+        TypedQuery<Concerto> query = em.createQuery("SELECT c FROM Concerto c WHERE c.in_streaming = :stato", Concerto.class);
+        query.setParameter("stato", stato);
+        return query.getResultList();
+    }
+
+    public List<Concerto> getConcertiPerGenere(GenereType genere) {
+        TypedQuery<Concerto> query = em.createQuery("SELECT c FROM Concerto c WHERE c.genere= :genere", Concerto.class);
+        query.setParameter("genere", genere);
         return query.getResultList();
     }
 }

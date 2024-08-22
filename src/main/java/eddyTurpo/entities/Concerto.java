@@ -50,7 +50,7 @@ public class Concerto extends Evento {
     @Override
     public String toString() {
         return "Concerto{" + super.toString() +
-                "genere=" + genere +
+                ", genere=" + genere +
                 ", in_streaming=" + in_streaming +
                 "} ";
     }
