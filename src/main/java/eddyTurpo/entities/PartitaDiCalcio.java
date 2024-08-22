@@ -14,7 +14,7 @@ public class PartitaDiCalcio extends Evento {
     private String squadra_di_casa;
     @Column(name = "squadra_ospite")
     private String squadra_ospite;
-    @Column(name = "squadra_vincente", nullable = false)
+    @Column(name = "squadra_vincente", nullable = true)
     private String squadra_vincente;
     @Column(name = "numero_gol_casa")
     private int numero_gol_squadra_casa;
@@ -25,14 +25,26 @@ public class PartitaDiCalcio extends Evento {
 
     }
 
-    public PartitaDiCalcio(String titolo, LocalDate dataEvento, String descrizione, EventType tipoEvento, long numeroMassimoPartecipanti, Location location, String squadra_di_casa, String squadra_ospite, String squadra_vincente, int numero_gol_squadra_casa, int numero_gol_ospite) {
+    public PartitaDiCalcio(String titolo, LocalDate dataEvento, String descrizione, EventType tipoEvento, long numeroMassimoPartecipanti, Location location, String squadra_di_casa, String squadra_ospite, int numero_gol_squadra_casa, int numero_gol_ospite) {
         super(titolo, dataEvento, descrizione, tipoEvento, numeroMassimoPartecipanti, location);
         this.squadra_di_casa = squadra_di_casa;
         this.squadra_ospite = squadra_ospite;
-        this.squadra_vincente = squadra_vincente;
         this.numero_gol_squadra_casa = numero_gol_squadra_casa;
         this.numero_gol_ospite = numero_gol_ospite;
+        this.squadra_vincente = calcolaSquadraVincente();
     }
+
+
+    public String calcolaSquadraVincente() {
+        if (numero_gol_ospite > numero_gol_squadra_casa) {
+            return this.squadra_vincente = squadra_ospite;
+        } else if (numero_gol_ospite < numero_gol_squadra_casa) {
+            return this.squadra_vincente = squadra_di_casa;
+        } else {
+            return this.squadra_vincente;
+        }
+    }
+
 
     public String getSquadra_di_casa() {
         return squadra_di_casa;

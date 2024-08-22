@@ -2,6 +2,7 @@ package eddyTurpo.dao;
 
 import eddyTurpo.entities.Concerto;
 import eddyTurpo.entities.Evento;
+import eddyTurpo.entities.PartitaDiCalcio;
 import eddyTurpo.enums.GenereType;
 import eddyTurpo.enums.InStreamingType;
 import eddyTurpo.exceptions.NotFoundEx;
@@ -52,6 +53,29 @@ public class EventDAO {
     public List<Concerto> getConcertiPerGenere(GenereType genere) {
         TypedQuery<Concerto> query = em.createQuery("SELECT c FROM Concerto c WHERE c.genere= :genere", Concerto.class);
         query.setParameter("genere", genere);
+        return query.getResultList();
+    }
+
+    public List<PartitaDiCalcio> getPartiteVinteInCasa(String squadra) {
+        TypedQuery<PartitaDiCalcio> query = em.createQuery(
+                "SELECT p FROM PartitaDiCalcio p WHERE p.squadra_di_casa = :squadra AND p.squadra_vincente = :squadra",
+                PartitaDiCalcio.class);
+        query.setParameter("squadra", squadra);
+        return query.getResultList();
+    }
+
+    public List<PartitaDiCalcio> getPartiteVinteInTrasferta(String squadra) {
+        TypedQuery<PartitaDiCalcio> query = em.createQuery(
+                "SELECT p FROM PartitaDiCalcio p WHERE p.squadra_ospite=:squadra AND p.squadra_vincente=:squadra",
+                PartitaDiCalcio.class);
+        query.setParameter("squadra", squadra);
+        return query.getResultList();
+    }
+
+    public List<PartitaDiCalcio> getPartitePareggiate() {
+        TypedQuery<PartitaDiCalcio> query = em.createQuery(
+                "SELECT p FROM PartitaDiCalcio p WHERE p.squadra_vincente IS NULL",
+                PartitaDiCalcio.class);
         return query.getResultList();
     }
 }
