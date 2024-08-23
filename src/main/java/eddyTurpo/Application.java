@@ -4,10 +4,7 @@ import eddyTurpo.dao.EventDAO;
 import eddyTurpo.dao.LocationDAO;
 import eddyTurpo.dao.PartecipazioneDAO;
 import eddyTurpo.dao.PersonaDAO;
-import eddyTurpo.entities.Concerto;
-import eddyTurpo.entities.Location;
-import eddyTurpo.entities.PartitaDiCalcio;
-import eddyTurpo.entities.Persona;
+import eddyTurpo.entities.*;
 import eddyTurpo.enums.EventType;
 import eddyTurpo.enums.GenereType;
 import eddyTurpo.enums.InStreamingType;
@@ -18,6 +15,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -69,11 +67,11 @@ public class Application {
         }*/
 
         PartitaDiCalcio romaLazio = new PartitaDiCalcio("Serie A", LocalDate.now(), "Derby capitolino", EventType.PUBBLICO, 5000, location1, "Roma", "Lazio", 3, 2);
-        eventDAO.save(romaLazio);
+        // eventDAO.save(romaLazio);
         PartitaDiCalcio lazioRoma = new PartitaDiCalcio("Serie A", LocalDate.now(), "Derby capitolino", EventType.PUBBLICO, 5000, location1, "Lazio", "Roma", 2, 3);
-        eventDAO.save(lazioRoma);
+        //eventDAO.save(lazioRoma);
         PartitaDiCalcio romaInter = new PartitaDiCalcio("Roma-Inter", LocalDate.now(), "DAJE ROMA DAJE", EventType.PUBBLICO, 8000, location1, "Roma", "Inter", 1, 1);
-        eventDAO.save(romaInter);
+        //eventDAO.save(romaInter);
 
         List<PartitaDiCalcio> casaVincitore = eventDAO.getPartiteVinteInCasa("Roma");
         System.out.println("Lista casa vincitore: " + casaVincitore);
@@ -84,7 +82,24 @@ public class Application {
         System.out.println("-------------");
         List<PartitaDiCalcio> partitePareggiate = eventDAO.getPartitePareggiate();
         System.out.println(partitePareggiate);
-
+        System.out.println("-------------");
+        List<Persona> listaAtleti = new ArrayList<>();
+        listaAtleti.add(persona1);
+        listaAtleti.add(persona2);
+        listaAtleti.add(persona3);
+        GaraAtletica olimpiadi = new GaraAtletica("Olimpiadi", LocalDate.now(), "si volaaa", EventType.PUBBLICO, 50, location1, listaAtleti, persona1);
+        eventDAO.save(olimpiadi);
+        GaraAtletica olimpiadi2 = new GaraAtletica("Olimpiadi2", LocalDate.now(), "si volaaa", EventType.PUBBLICO, 50, location1, listaAtleti, persona1);
+        eventDAO.save(olimpiadi2);
+        System.out.println(olimpiadi);
+        List<GaraAtletica> vincitoriOlimpiadi = eventDAO.getGareDiAtleticaPerVincitore(persona1);
+        vincitoriOlimpiadi.forEach(System.out::println);
+        System.out.println("-------------");
+        List<GaraAtletica> atletiOlimpiadi = eventDAO.getGareDiAtleticaPerPartecipante(persona2);
+        atletiOlimpiadi.forEach(System.out::println);
+        System.out.println("-------------");
+        List<Concerto> eventiSoldOut = eventDAO.getEventiSouldOut(140);
+        eventiSoldOut.forEach(System.out::println);
 
         em.close();
         emf.close();

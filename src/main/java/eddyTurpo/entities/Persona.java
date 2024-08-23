@@ -85,4 +85,16 @@ public class Persona {
     public void setSesso(SessoType sesso) {
         this.sesso = sesso;
     }
+
+    @Override
+    public String toString() {
+        return "Persona{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", email='" + email + '\'' +
+                ", data_nascita=" + data_nascita +
+                ", sesso=" + sesso +
+                '}';
+    }
 }

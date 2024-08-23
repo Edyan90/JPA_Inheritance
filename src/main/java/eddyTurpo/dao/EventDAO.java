@@ -1,8 +1,6 @@
 package eddyTurpo.dao;
 
-import eddyTurpo.entities.Concerto;
-import eddyTurpo.entities.Evento;
-import eddyTurpo.entities.PartitaDiCalcio;
+import eddyTurpo.entities.*;
 import eddyTurpo.enums.GenereType;
 import eddyTurpo.enums.InStreamingType;
 import eddyTurpo.exceptions.NotFoundEx;
@@ -41,7 +39,6 @@ public class EventDAO {
         em.remove(found);
         transaction.commit();
         System.out.println("l'evento è stato rimosso!");
-
     }
 
     public List<Concerto> getConcertiInStreaming(InStreamingType stato) {
@@ -76,6 +73,33 @@ public class EventDAO {
         TypedQuery<PartitaDiCalcio> query = em.createQuery(
                 "SELECT p FROM PartitaDiCalcio p WHERE p.squadra_vincente IS NULL",
                 PartitaDiCalcio.class);
+        return query.getResultList();
+    }
+
+    public List<GaraAtletica> getGareDiAtleticaPerVincitore(Persona vincitore) {
+        TypedQuery<GaraAtletica> query = em.createQuery(
+                "SELECT g FROM GaraAtletica g WHERE g.vincitore=:vincitore",
+                GaraAtletica.class);
+        query.setParameter("vincitore", vincitore);
+        return query.getResultList();
+    }
+
+    public List<GaraAtletica> getGareDiAtleticaPerPartecipante(Persona atleta) {
+        TypedQuery<GaraAtletica> query = em.createQuery(
+                "SELECT g FROM GaraAtletica g WHERE :atleta MEMBER OF g.lista_atleti",
+                GaraAtletica.class);
+        query.setParameter("atleta", atleta);
+        return query.getResultList();
+    }
+
+    public List<Concerto> getEventiSouldOut(int partecipanti) {
+        TypedQuery<Concerto> query = em.createQuery(
+                "SELECT c FROM Concerto c WHERE c.numeroMassimoPartecipanti=:partecipanti",
+                Concerto.class);
+        query.setParameter("partecipanti", partecipanti);
+        if (query.getResultList().isEmpty()) {
+            throw new NotFoundEx(partecipanti);
+        }
         return query.getResultList();
     }
 }
