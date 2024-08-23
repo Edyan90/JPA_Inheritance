@@ -98,9 +98,16 @@ public class Application {
         List<GaraAtletica> atletiOlimpiadi = eventDAO.getGareDiAtleticaPerPartecipante(persona2);
         atletiOlimpiadi.forEach(System.out::println);
         System.out.println("-------------");
-        List<Concerto> eventiSoldOut = eventDAO.getEventiSouldOut(140);
+        List<Concerto> eventiSoldOut = eventDAO.getEventiSouldOut(150);
         eventiSoldOut.forEach(System.out::println);
+        System.out.println("-------------");
 
+        Partecipazione concertoMilky = new Partecipazione(persona3, concerto1, null);
+        partecipazioneDAO.save(concertoMilky);
+        System.out.println("-------------");
+        List<Partecipazione> pDaConfermare = partecipazioneDAO.getPartecipazioniDaConfermarePerEvento(concerto1);
+        System.out.println(pDaConfermare);
+        System.out.println("-------------");
         em.close();
         emf.close();
     }

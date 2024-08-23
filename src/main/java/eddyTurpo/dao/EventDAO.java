@@ -81,6 +81,9 @@ public class EventDAO {
                 "SELECT g FROM GaraAtletica g WHERE g.vincitore=:vincitore",
                 GaraAtletica.class);
         query.setParameter("vincitore", vincitore);
+        if (query.getResultList().isEmpty()) {
+            throw new NotFoundEx(vincitore);
+        }
         return query.getResultList();
     }
 
@@ -89,6 +92,9 @@ public class EventDAO {
                 "SELECT g FROM GaraAtletica g WHERE :atleta MEMBER OF g.lista_atleti",
                 GaraAtletica.class);
         query.setParameter("atleta", atleta);
+        if (query.getResultList().isEmpty()) {
+            throw new NotFoundEx(atleta);
+        }
         return query.getResultList();
     }
 
